@@ -2,6 +2,10 @@ name: Init
 description: "Set up prereqs for Node.js env"
 
 inputs:
+  skip-install:
+    description: Will skip the last step (Like, for example, if you only need Node.js and nothing else)
+    required: false
+    default: "false"
   packages-to-install:
     description: Will only install specific packages if present.
     required: false
@@ -25,5 +29,8 @@ runs:
         cache: "pnpm"
 
     - name: Install dependencies
-      run: pnpm install ${{ inputs.packages-to-install }}
+      run: |
+        if [ "${{ inputs.skip-install }}" == "false" ]; then
+          pnpm install ${{ inputs.packages-to-install }}
+        fi
       shell: bash
